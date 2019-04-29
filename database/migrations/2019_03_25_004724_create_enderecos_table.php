@@ -16,12 +16,19 @@ class CreateEnderecosTable extends Migration
         Schema::create('enderecos', function (Blueprint $table) {
             $table->increments('idend');
             $table->integer('idvol')->unsigned();
-            $table->integer('cep', 8);
+            $table->string('cep', 8);
             $table->string('rua', 50);
             $table->string('complemento', 50);
             $table->string('cidade', 30);
             $table->string('estado', 2);
+
+            $table->softDeletes();
+            $table->timestamps();
             $table->foreign('idvol')->references('idvol')->on('voluntarios');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_unicode_ci';
         });
     }
 

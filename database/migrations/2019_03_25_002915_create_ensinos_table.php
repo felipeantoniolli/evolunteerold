@@ -22,9 +22,14 @@ class CreateEnsinosTable extends Migration
             $table->date('conclusao');
             $table->boolean('concluido')->nullable();
             $table->text('obs', 500)->nullable();
+
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('idvol')->references('idvol')->on('voluntarios');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_unicode_ci';
         });
     }
 

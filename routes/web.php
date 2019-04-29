@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/cadastro', 'VoluntarioController@signUp');
+Route::post('/cadastro', 'VoluntarioController@insert');
+
+Route::get('/login', 'VoluntarioController@signIn');
+Route::post('/login', 'VoluntarioController@login');
+
+Route::get('/minhaconta', 'VoluntarioController@myAccount');
