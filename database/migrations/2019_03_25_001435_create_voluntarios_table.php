@@ -15,7 +15,7 @@ class CreateVoluntariosTable extends Migration
     {
         Schema::create('voluntarios', function (Blueprint $table) {
             $table->increments('idvol');
-            $table->string('usuario', 50);
+            $table->string('usuario', 50)->unique();
             $table->string('nome', 150);
             $table->string('senha', 50);
             $table->string('email', 50);
@@ -23,10 +23,13 @@ class CreateVoluntariosTable extends Migration
             $table->string('rg', 9)->nullable();
             $table->date('data_nasc');
             $table->boolean('genero')->nullable();
-            $table->boolean('ativo');
 
             $table->softDeletes();
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_unicode_ci';
         });
     }
 

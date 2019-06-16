@@ -10,6 +10,6 @@ class Voluntario extends Model
     use softDeletes;
 
     protected $table = 'voluntarios';
-    protected $fillable = ['usuario', 'nome', 'email', 'cpf', 'rg', 'data_nasc', 'genero', 'ativo'];
-    protected $guarded = ['idvol', 'senha', 'deleted_at', 'created_at', 'update_at'];
+    protected $fillable = ['usuario', 'nome', 'email', 'senha', 'cpf', 'rg', 'data_nasc', 'genero'];
+    protected $guarded = ['idvol', 'deleted_at', 'created_at', 'update_at'];
 }
