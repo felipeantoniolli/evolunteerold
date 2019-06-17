@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEnsinosTable extends Migration
+class CreateContatosVoluntariosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,14 @@ class CreateEnsinosTable extends Migration
      */
     public function up()
     {
-        Schema::create('ensinos', function (Blueprint $table) {
-            $table->bigIncrements('idEnsino');
+        Schema::create('contatos_voluntarios', function (Blueprint $table) {
             $table->bigInteger('idVoluntario')->unsigned();
-            $table->string('nome', 150);
-            $table->tinyInteger("tipo");
-            $table->dateTime("dataInicio");
-            $table->dateTime('dataFim')->nullable();
-            $table->boolean('concluido')->nullable();
-            $table->string('obs', 500)->nullable();
+            $table->bigInteger('idContato')->unsigned();
 
+            $table->foreign('idVoluntario')->references('idVoluntario')->on('voluntarios');
+            $table->foreign('idContato')->references('idContato')->on('contatos');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('idVoluntario')->references('idVoluntario')->on('voluntarios');
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
@@ -40,6 +35,6 @@ class CreateEnsinosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ensinos');
+        Schema::dropIfExists('contatos_voluntarios');
     }
 }

@@ -5,21 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Ensino extends Model
+class Contato extends Model
 {
     use softDeletes;
 
-    protected $table = 'ensinos';
+    protected $table = 'enderecos';
 
     protected $fillable = [
-        'idEnsino',
-        'idVoluntario',
-        'nome',
+        'idContato',
         'tipo',
-        'dataInicio',
-        'dataFim',
-        'concluido',
-        'obs'
+        'valor',
     ];
 
     protected $guarded = ['deleted_at', 'created_at', 'update_at'];

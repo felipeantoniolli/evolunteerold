@@ -10,6 +10,17 @@ class Endereco extends Model
     use softDeletes;
 
     protected $table = 'enderecos';
-    protected $fillable = ['cep', 'rua', 'numero', 'complemento', 'cidade', 'estado'];
-    protected $guarded = ['idend', 'idvol', 'deleted_at', 'created_at', 'update_at'];
+
+    protected $fillable = [
+        'idEndereco',
+        'idVoluntario',
+        'cep',
+        'rua',
+        'numero',
+        'complemento',
+        'cidade',
+        'estado'
+    ];
+
+    protected $guarded = ['deleted_at', 'created_at', 'update_at'];
 }

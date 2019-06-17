@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Controllers\HomeController;
+use App\Usuario;
 use App\Voluntario;
 
 class VoluntarioController extends Controller
 {
+    private $salt = "YlthmR1AyzIZSW4G";
     public function rules(Request $request)
     {
         $rules = [
-            'usuario' => 'required|min:3|max:50|unique:voluntarios',
+            'usuario' => 'required|min:3|max:50|unique:usuarios',
             'senha' => 'required|min:5|max:50',
-            'nome' => 'required|min:3|max:150',
-            'email' => 'required|email|max:50',
+            'nome' => 'required|min:3|max:50',
+            'sobrenome' => 'required|min:3|max:100',
+            'email' => 'required|email|max:50|unique:usuarios',
             'cpf' => 'required|min:11|max:11',
             'rg' => 'nullable',
             'genero' => 'nullable',
@@ -22,6 +26,7 @@ class VoluntarioController extends Controller
 
         $messages = [
             'required' => 'O campo :attribute é obrigatório.',
+            'unique' => 'Campo inválido.',
             'usuario.min' => 'O minimo de caracteres validos é 3.',
             'usuario.max' => 'O máximo de caracteres validos é 50.',
             'senha.min' => 'O minimo de caracteres validos é 3.',
@@ -40,115 +45,43 @@ class VoluntarioController extends Controller
     {
         $this->rules($request);
 
-        Voluntario::create($request->all());
+        $voluntario = $request->all();
 
-        return view('login');
-    }
+        $user = [
+            'email' => $voluntario['email'],
+            'usuario' => $voluntario['usuario'],
+            'senha' => hash("sha256", $voluntario['senha'] . $this->salt),
+            'tipo' => 0,
+            'ativo' => 1
+        ];
+        $userId = Usuario::create($user)->id;
 
-    public function update(Request $request)
-    {
-        $rules = $this->rules();
-        $request->validate($rules[0], $rules[1]);
+        $voluntario = array_merge($voluntario, ['idUsuario' => $userId]);
+        Voluntario::create($voluntario);
 
-        $voluntario = new Voluntario;
-
-        $voluntario->findOrFail($request->id);
-        if (!isset($voluntario)) {
-            return "Não foi encontrado nenhum voluntário com esse id.";
-        }
-
-        $voluntario->idvol = $request->id;
-        $voluntario->usuario = $request->usuario;
-        $voluntario->senha = $request->senha;
-        $voluntario->nome = $request->nome;
-        $voluntario->email = $request->email;
-        $voluntario->cpf = $request->cpf;
-        $voluntario->rg = $request->rg ? $request->rg : null;
-        $voluntario->data_nasc = $request->data_nasc;
-        $voluntario->genero = $request->genero ? $request->genero : null;
-
-        $voluntario->save();
-
-        return "Atualizado com sucesso.";
-    }
-
-    public function delete(Request $request)
-    {
-        if (!isset($request)) {
-            return "Não há nada para deletar.";
-        }
-
-        if (!$request->id) {
-            return "Erro ao deletar o voluntário.";
-        }
-
-        $voluntario = new Voluntario;
-        $voluntario->findOrFail($request->id);
-
-        $voluntario->delete();
-
-        return "Deletado com sucesso.";
-    }
-
-    public function login(Request $request)
-    {
-        $request->validate([
-            'usuario' => 'required',
-            'senha' => 'required'
-        ], [
-            'required' => 'Campo vazio'
-        ]);
-
-        $voluntario = Voluntario::where([
-            ['usuario', '=', $request->usuario],
-            ['senha', '=', $request->senha]
-        ])->first();
-
-        if (empty($voluntario)) {
-            $loginError = 'Login ou senha inválidos.';
-            return view('login', ['message' => $loginError]);
-        }
-
-        $request->session()->put('voluntario', $voluntario->idvol);
-
-        return $this->myAccount();
+        return view('root/login');
     }
 
     public function signUp()
     {
-        $voluntario = session('voluntario');
-        if (isset($voluntario)) {
-            return view('minhaconta');
+        if (HomeController::isLogged()) {
+            return HomerController::userIndex();
         }
 
-        return view('cadastro');
-    }
-
-    public function signIn()
-    {
-        $voluntario = session('voluntario');
-        if (isset($voluntario)) {
-            return view('minhaconta');
-        }
-
-        return view('login');
+        return view('voluntario/cadastro');
     }
 
     public function myAccount()
     {
-        $voluntario = session('voluntario');
+        $usuario = Auth::user();
 
-        if  (!isset($voluntario)) {
-            $notLoged = 'Você não está logado.';
-            return view('login', ['message' => $notLoged]);
-        }
-
-        $voluntario = Voluntario::where('idvol', $voluntario)->first();
-
-        if (!isset($voluntario)) {
+        $usuario = Usuario::where('idUsuario', $usuario->idUsuario)->first();
+        if (!isset($usuario)) {
             $notFound = 'Usuário não encontrado.';
             return view('login', ['message' => $notFound]);
         }
+
+        $voluntario = Voluntario::where(['idUsuario', $usuario->idUsuario])->first();
 
         return view('minhaconta', ['voluntario' => $voluntario]);
     }

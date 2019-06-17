@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content">
-    <form method="POST" action="/login" class="text-center border border-light p-5">
+    <form method="POST" action="{{ route('site.signIn') }}" class="text-center border border-light p-5">
         @csrf
         <p class="h4 mb-4">Login</p>
         @if(isset($message))

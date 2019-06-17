@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInteressesTable extends Migration
+class CreateContatosInstituicoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateInteressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('interesses', function (Blueprint $table) {
-            $table->increments('idinter');
-            $table->integer('idvol')->unsigned();
-            $table->text('interesse', 500);
+        Schema::create('contatos_instituicoes', function (Blueprint $table) {
+            $table->bigInteger('idInstituicao')->unsigned();
+            $table->bigInteger('idContato')->unsigned();
 
+            $table->foreign('idInstituicao')->references('idInstituicao')->on('instituicoes');
+            $table->foreign('idContato')->references('idContato')->on('contatos');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('idvol')->references('idvol')->on('voluntarios');
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
@@ -35,6 +35,6 @@ class CreateInteressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('interesses');
+        Schema::dropIfExists('contatos_instituicoes');
     }
 }

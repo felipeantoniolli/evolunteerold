@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVoluntariosTable extends Migration
+class CreateAreasAtuacoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,10 @@ class CreateVoluntariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('voluntarios', function (Blueprint $table) {
-            $table->bigIncrements('idVoluntario');
-            $table->bigInteger('idUsuario')->unsigned();
+        Schema::create('areas_atuacoes', function (Blueprint $table) {
+            $table->bigIncrements('idAreaAtuacao');
             $table->string('nome', 50);
-            $table->string('sobrenome', 100);
-            $table->string('cpf', 11);
-            $table->string('rg', 9)->nullable();
-            $table->date('data_nasc');
-            $table->tinyInteger('genero');
 
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuarios');
             $table->softDeletes();
             $table->timestamps();
 
@@ -40,6 +33,6 @@ class CreateVoluntariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('voluntarios');
+        Schema::dropIfExists('areas_atuacoes');
     }
 }

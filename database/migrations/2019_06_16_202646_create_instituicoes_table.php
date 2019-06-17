@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVoluntariosTable extends Migration
+class CreateInstituicoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateVoluntariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('voluntarios', function (Blueprint $table) {
-            $table->bigIncrements('idVoluntario');
+        Schema::create('instituicoes', function (Blueprint $table) {
+            $table->bigIncrements('idInstituicao');
             $table->bigInteger('idUsuario')->unsigned();
-            $table->string('nome', 50);
-            $table->string('sobrenome', 100);
-            $table->string('cpf', 11);
-            $table->string('rg', 9)->nullable();
-            $table->date('data_nasc');
-            $table->tinyInteger('genero');
+            $table->string('razao', 150);
+            $table->string('fantasia', 150);
+            $table->string('cpf', 11)->nullable();
+            $table->string('cnpj', 14)->nullable();
 
             $table->foreign('idUsuario')->references('idUsuario')->on('usuarios');
             $table->softDeletes();
@@ -40,6 +38,6 @@ class CreateVoluntariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('voluntarios');
+        Schema::dropIfExists('instituicoes');
     }
 }

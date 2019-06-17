@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content">
-    <form method="POST" action="/cadastro" class="text-center border border-light p-5">
+    <form method="POST" action="{{route('voluntario.signUp')}}" class="text-center border border-light p-5">
         @csrf
         <p class="h4 mb-4">Cadastre-se</p>
         <div class="form-row mb-4">
@@ -16,6 +16,17 @@
                 @endif
             </div>
             <div class="col">
+                <label for="email">Sobrenome</label>
+                <input type="text" class="form-control {{ $errors->has('sobrenome')? 'is-invalid' : ''}}" name="sobrenome" id="sobrenome" placeholder="Insira seu Sobrenome">
+                @if($errors->has('sobrenome'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('sobrenome') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="form-row mb-4">
+            <div class="col">
                 <label for="email">Email</label>
                 <input type="email" class="form-control {{ $errors->has('email')? 'is-invalid' : ''}}" name="email" id="email" placeholder="Insira seu Email">
                 @if($errors->has('email'))
@@ -24,8 +35,6 @@
                     </div>
                 @endif
             </div>
-        </div>
-        <div class="form-row mb-4">
             <div class="col">
                 <label for="usuario">Usuário</label>
                 <input type="text" class="form-control {{ $errors->has('usuario')? 'is-invalid' : ''}}" name="usuario" id="usuario" placeholder="Insira seu Usuário">

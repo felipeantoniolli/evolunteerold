@@ -11,14 +11,30 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/**
+ * Routes do index do sistema
+ */
+Route::get('/', ['as' => 'site.index', 'uses' => 'HomeController@index']);
+Route::get('/login', ['as' => 'site.login', 'uses' => 'HomeController@login']);
+Route::post('/signIn', ['as' => 'site.signIn', 'uses' => 'HomeController@signIn']);
+
+Route::get('/cadastro', ['as' => 'site.cadastro', 'uses' => 'HomeController@signUp']);
+Route::post('/voluntario/signUp', ['as' => 'voluntario.signUp', 'uses' => 'VoluntarioController@insert']);
+
+/**
+ * Routes dos voluntários
+ *
+ * @middleware CheckVoluntario
+ */
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/voluntario', ['as' => 'voluntario.index', 'uses' => 'VoluntarioController@index'])->middleware("CheckVoluntario");
 });
 
-Route::get('/cadastro', 'VoluntarioController@signUp');
-Route::post('/cadastro', 'VoluntarioController@insert');
-
-Route::get('/login', 'VoluntarioController@signIn');
-Route::post('/login', 'VoluntarioController@login');
-
-Route::get('/minhaconta', 'VoluntarioController@myAccount');
+/**
+ * Routes das instituições
+ *
+ * @middleware CheckInstituicao
+ */
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/instituicao', 'IntituicaoController@index')->middleware("CheckInstituicao");
+});
